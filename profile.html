@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Profile | HomePrice.AI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --navy-text: #111827;
+            --cyan-accent: #00D1FF;
+            --bg-page: #F3F4F6;
+            --btn-dark: #0f172a;
+            --card-bg: #FFFFFF;
+            --text-muted: #6B7280;
+            --border-color: #E5E7EB;
+            --header-height: 80px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-page);
+            margin: 0;
+            color: var(--navy-text);
+            height: 100vh;
+            overflow: hidden; /* 🚫 stop page scroll */
+        }
+
+        /* ===== TOP HEADER ===== */
+        .top-header {
+            height: var(--header-height);
+            background: white;
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 40px;
+            display: flex;
+            align-items: center;
+        }
+
+        .top-header-inner {
+            width: 100%;
+            max-width: 1100px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .center-logo {
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .center-logo span {
+            color: var(--cyan-accent);
+        }
+
+        .top-header a {
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .back-link {
+            color: #2563EB;
+        }
+
+        .logout-link {
+            color: #EF4444;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            height: calc(100vh - var(--header-height));
+            overflow-y: auto; /* ✅ scroll ONLY inside content */
+            max-width: 1100px;
+            margin: auto;
+            padding: 25px 30px;
+        }
+
+        h1 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        /* ===== PROFILE HEADER ===== */
+        .profile-header {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .avatar-circle {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #0f172a, #334155);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .header-info div:first-child {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .header-info div:last-child {
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        .badge {
+            background: #EFF6FF;
+            color: #2563EB;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        /* ===== GRID ===== */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 20px;
+        }
+
+        .section-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .section-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #F3F4F6;
+        }
+
+        /* ===== INPUTS ===== */
+        .input-group {
+            margin-bottom: 14px;
+        }
+
+        .input-group label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: #F9FAFB;
+            font-size: 13px;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            background: white;
+            border-color: var(--cyan-accent);
+        }
+
+        .primary-btn {
+            background-color: var(--btn-dark);
+            color: white;
+            border: none;
+            padding: 11px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .msg {
+            margin-top: 10px;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .success { color: #10B981; }
+        .error { color: #EF4444; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 900px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- TOP HEADER -->
+<div class="top-header">
+    <div class="top-header-inner">
+        <a href="{{ url_for('dashboard') }}" class="back-link">← Back to Dashboard</a>
+        <div class="center-logo">HOMEPRICE<span>.AI</span></div>
+        <a href="{{ url_for('logout') }}" class="logout-link">Logout</a>
+    </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main-content">
+    <h1>Account Settings</h1>
+
+    <div class="profile-header">
+        <div class="avatar-circle">{{ user.Username[0].upper() }}</div>
+        <div class="header-info">
+            <div>{{ user.Username }} <span class="badge">{{ user.Usertype }}</span></div>
+            <div>{{ user.Email }}</div>
+        </div>
+    </div>
+
+    <div class="content-grid">
+        <div class="section-card">
+            <div class="section-title">Personal Information</div>
+            <div class="input-group">
+                <label>Username</label>
+                <input type="text" value="{{ user.Username }}" readonly>
+            </div>
+            <div class="input-group">
+                <label>Email</label>
+                <input type="email" value="{{ user.Email }}" readonly>
+            </div>
+            <div class="input-group">
+                <label>Member ID</label>
+                <input type="text" value="#{{ user.id }}" readonly>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-title">Security</div>
+            <form action="{{ url_for('change_password') }}" method="POST">
+                <div class="input-group">
+                    <label>Current Password</label>
+                    <input type="password" name="old_password" required>
+                </div>
+                <div class="input-group">
+                    <label>New Password</label>
+                    <input type="password" name="new_password" required>
+                </div>
+                <div class="input-group">
+                    <label>Confirm Password</label>
+                    <input type="password" name="confirm_password" required>
+                </div>
+                <button class="primary-btn">Update Password</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

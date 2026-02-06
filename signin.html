@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Login | HomePrice.AI</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+
+    :root {
+
+      --primary-cyan: #00e5ff;
+
+      --deep-navy: #0f172a;
+
+      --glass: rgba(255, 255, 255, 0.05);
+
+      --glass-border: rgba(255, 255, 255, 0.1);
+
+    }
+
+    * {
+
+      margin: 0;
+
+      padding: 0;
+
+      box-sizing: border-box;
+
+      font-family: "Poppins", sans-serif;
+
+    }
+
+    body {
+
+      height: 100vh;
+
+      background: linear-gradient(rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.9));
+
+      background-size: cover;
+
+      background-position: center;
+
+      display: flex;
+
+      justify-content: center;
+
+      align-items: center;
+
+      color: white;
+
+    }
+
+    .layout {
+
+      width: 100%;
+
+      max-width: 1150px;
+
+      display: grid;
+
+      grid-template-columns: 1.1fr 0.9fr;
+
+      gap: 40px;
+
+      padding: 24px;
+
+    }
+
+    .left {
+
+      display: flex;
+
+      flex-direction: column;
+
+      justify-content: center;
+
+    }
+
+    .logo {
+
+      font-size: 1.5rem;
+
+      font-weight: 700;
+
+      margin-bottom: 20px;
+
+    }
+
+    .logo span {
+
+      color: var(--primary-cyan);
+
+    }
+
+    .left h1 {
+
+      font-size: 2.4rem;
+
+      font-weight: 700;
+
+      margin-bottom: 10px;
+
+    }
+
+    .left p {
+
+      color: rgba(255, 255, 255, 0.75);
+
+      max-width: 450px;
+
+      line-height: 1.7;
+
+      font-size: 0.95rem;
+
+    }
+
+    .card {
+
+      background: white;
+
+      color: #111;
+
+      border-radius: 18px;
+
+      padding: 35px 36px;
+
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35);
+
+    }
+
+    .card h2 {
+
+      margin-bottom: 4px;
+
+      font-size: 1.6rem;
+
+    }
+
+    .card small {
+
+      color: #666;
+
+    }
+
+    label {
+
+      font-size: 13px;
+
+      font-weight: 600;
+
+      margin-top: 18px;
+
+      display: block;
+
+    }
+
+    input,
+
+    select {
+
+      width: 100%;
+
+      padding: 10px 12px;
+
+      border-radius: 10px;
+
+      border: 1px solid #ddd;
+
+      margin-top: 6px;
+
+      font-size: 14px;
+
+    }
+
+    input:focus,
+
+    select:focus {
+
+      border-color: var(--primary-cyan);
+
+      outline: none;
+
+    }
+
+    .SignIn-btn {
+
+      width: 100%;
+
+      padding: 11px 0;
+
+      border-radius: 10px;
+
+      border: none;
+
+      margin-top: 18px;
+
+      background: #111;
+
+      color: white;
+
+      font-weight: 600;
+
+      cursor: pointer;
+
+    }
+
+    .msg {
+
+      margin-top: 10px;
+
+      font-size: 13px;
+
+      color: red;
+
+    }
+
+    .footer {
+
+      text-align: center;
+
+      margin-top: 14px;
+
+      font-size: 13px;
+
+    }
+
+    .footer a {
+
+      color: #0ea5e9;
+
+      text-decoration: none;
+
+    }
+
+    @media (max-width: 900px) {
+
+      .layout {
+
+        grid-template-columns: 1fr;
+
+      }
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <div class="layout">
+
+    <div class="left">
+
+      <div class="logo">HOMEPRICE<span>.AI</span></div>
+
+      <h1>Welcome to House Price Predictor</h1>
+      
+      <p>
+
+        This application allows users to check estimated house prices
+
+        by entering basic property details.
+
+      </p>
+
+    </div>
+
+    <div class="card">
+
+      <h2>SignIn</h2>
+
+      <small>Enter your credentials</small>
+
+      <form method="POST" action="{{ url_for('signin') }}">
+
+        <label>User Type</label>
+
+        <select name="usertype" required>
+
+          <option value="">Select user type</option>
+
+          <option value="Admin">Admin</option>
+
+          <option value="Agent">Agent</option>
+
+          <option value="Customer">Customer</option>
+
+        </select>
+
+        <label>Username</label>
+        <input name="username" type="text" placeholder="Enter username" required>
+
+        <label>Password</label>
+
+        <input name="password" type="password" placeholder="Enter password" required>
+
+        <button type="submit" class="SignIn-btn">Signin</button>
+
+      </form>
+
+      {% if error %}
+
+        <div class="msg">{{ error }}</div>
+
+      {% endif %}
+
+      <div class="footer">
+
+        Don’t have an account? <a href="{{ url_for('signup') }}">Sign Up</a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</body>
+
+</html>

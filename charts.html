@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Data Insights | HomePrice.AI</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+:root {
+    --navy-text:#111827;
+    --cyan-accent:#00D1FF;
+    --bg-page:#F3F4F6;
+    --btn-dark:#0f172a;
+}
+body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--bg-page);
+    margin:0;
+    padding:20px;
+}
+.top-nav {
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:15px;
+}
+a { text-decoration:none; font-weight:600; }
+.logo {
+    text-align:center;
+    font-size:26px;
+    font-weight:800;
+}
+.logo span { color:var(--cyan-accent); }
+
+.chart-card {
+    background:#fff;
+    border-radius:18px;
+    padding:25px;
+    margin:25px auto;
+    max-width:900px;
+    box-shadow:0 15px 35px rgba(0,0,0,0.05);
+}
+.chart-card h3 {
+    text-align:center;
+    margin-bottom:10px;
+    color:var(--navy-text);
+}
+.note-btn {
+    display:block;
+    margin:15px auto 0;
+    padding:10px 30px;
+    border:none;
+    border-radius:25px;
+    background:var(--btn-dark);
+    color:#fff;
+    cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="top-nav">
+    <a href="{{ url_for('dashboard') }}">← Back to Dashboard</a>
+    <a href="{{ url_for('logout') }}" style="color:red;">Logout</a>
+</div>
+
+<div class="logo">HOMEPRICE<span>.AI</span></div>
+
+<!-- AREA -->
+<div class="chart-card">
+<h3>Price Distribution Across Property Area</h3>
+<canvas id="areaChart"></canvas>
+<button class="note-btn">Add this to Notes</button>
+</div>
+
+<!-- AGE -->
+<div class="chart-card">
+<h3>Price Distribution Across Property Age</h3>
+<canvas id="ageChart"></canvas>
+<button class="note-btn">Add this to Notes</button>
+</div>
+
+<!-- BHK -->
+<div class="chart-card">
+<h3>Average Property Value by BHK Count</h3>
+<canvas id="bhkChart"></canvas>
+<button class="note-btn">Add this to Notes</button>
+</div>
+
+<!-- BATH -->
+<div class="chart-card">
+<h3>Price Trend Based on Number of Bathrooms</h3>
+<canvas id="bathChart"></canvas>
+<button class="note-btn">Add this to Notes</button>
+</div>
+
+<!-- BALCONY -->
+<div class="chart-card">
+<h3>Impact of Balcony Availability on Price</h3>
+<canvas id="balconyChart"></canvas>
+<button class="note-btn">Add this to Notes</button>
+</div>
+
+<!-- PARKING -->
+<div class="chart-card">
+<h3>Parking Facility vs Property Value</h3>
+<canvas id="parkingChart"></canvas>
+<button class="note-btn">Add this to Notes</button>
+</div>
+
+<!-- FURNISHING -->
+<div class="chart-card">
+<h3>Furnishing Type Influence on Pricing</h3>
+<canvas id="furnishingChart"></canvas>
+<button class="note-btn">Add this to Notes</button>
+</div>
+
+<!-- PROPERTY TYPE -->
+<div class="chart-card">
+<h3>Property Category and Average Pricing</h3>
+<canvas id="typeChart"></canvas>
+<button class="note-btn">Add this to Notes</button>
+</div>
+
+<!-- LOCATION -->
+<div class="chart-card">
+<h3>Location-wise Price Comparison</h3>
+<canvas id="locationChart"></canvas>
+<button class="note-btn">Add this to Notes</button>
+</div>
+
+<script>
+fetch("/chart-data").then(res=>res.json()).then(d=>{
+
+// AREA - scatter
+new Chart(areaChart,{
+    type:'scatter',
+    data:{datasets:[{data:d.area_price.map(x=>({x:x.area,y:x.price})), backgroundColor:'#00D1FF'}]},
+    options:{scales:{x:{title:{display:true,text:'Area (sq.ft)'}},y:{title:{display:true,text:'Price'}}}}
+});
+
+// AGE - scatter
+new Chart(ageChart,{
+    type:'scatter',
+    data:{datasets:[{data:d.age_price.map(x=>({x:x.age,y:x.price})), backgroundColor:'#00D1FF'}]},
+    options:{scales:{x:{title:{display:true,text:'Age (years)'}},y:{title:{display:true,text:'Price'}}}}
+});
+
+// Bar chart helper
+function barChart(id,data,label){
+    new Chart(id,{
+        type:'bar',
+        data:{labels:data.map(x=>x.label), datasets:[{data:data.map(x=>x.avg_price), backgroundColor:'#00D1FF'}]},
+        options:{scales:{x:{title:{display:true,text:label}}, y:{title:{display:true,text:'Average Price'}}}}
+    });
+}
+
+// Bar charts for categorical features
+barChart(bhkChart,d.bhk,'BHK');
+barChart(bathChart,d.bath,'Bathrooms');
+barChart(balconyChart,d.balcony,'Balcony');
+barChart(parkingChart,d.parking,'Parking');
+barChart(furnishingChart,d.furnishing,'Furnishing');
+barChart(typeChart,d.property_type,'Property Type');
+barChart(locationChart,d.location,'Location');
+
+});
+</script>
+</body>
+</html>

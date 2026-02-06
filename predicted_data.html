@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction History | HomePrice.AI</title>
+
+    <style>
+        :root {
+            --nav-bg: #1e293b;
+            --primary-blue: #3b82f6;
+            --text-main: #334155;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            background-color: #f8fafc;
+            color: var(--text-main);
+        }
+
+        /* Navigation */
+        header {
+            background-color: var(--nav-bg);
+            padding: 0.75rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+
+        .logo-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+        }
+
+        .logo-group span {
+            color: #38bdf8;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary { background: #334155; color: white; border: 1px solid #475569; }
+        .btn-secondary:hover { background: #475569; }
+        .btn-outline { border: 1px solid #ef4444; color: #ef4444; }
+        .btn-outline:hover { background: #ef4444; color: white; }
+
+        /* Main Content */
+        .main-container {
+            padding: 30px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .table-header {
+            margin-bottom: 20px;
+        }
+
+        .table-card {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .scroll-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1200px;
+        }
+
+        th {
+            background: #f1f5f9;
+            padding: 16px;
+            text-align: left;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #64748b;
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 16px;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 14px;
+        }
+
+        tr:last-child td { border-bottom: none; }
+        tr:hover { background-color: #f8fafc; }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            background: #f1f5f9;
+        }
+
+        .price-text {
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .area-text { color: var(--primary-blue); font-weight: 600; }
+    </style>
+</head>
+<body>
+
+<header>
+    <!-- LOGO -->
+    <div class="logo-group">
+        HOMEPRICE<span>.AI</span>
+    </div>
+
+    <!-- NAV BUTTONS -->
+    <div class="btn-group">
+        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">← Back to Dashboard</a>
+        <a href="{{ url_for('logout') }}" class="btn btn-outline">Logout</a>
+    </div>
+</header>
+
+<div class="main-container">
+    <div class="table-header">
+        <h1 style="font-size: 24px; margin-bottom: 8px;">House Prediction History</h1>
+        <p style="color: #64748b; margin: 0;">Showing records from your predictions</p>
+    </div>
+
+    <div class="table-card">
+        <div class="scroll-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Area</th>
+                        <th>Location</th>
+                        <th>BHK</th>
+                        <th>Bath</th>
+                        <th>Balcony</th>
+                        <th>Parking</th>
+                        <th>Furnishing</th>
+                        <th>Property Type</th>
+                        <th>Age</th>
+                        <th>Predicted Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                {% for row in predictions %}
+                    <tr>
+                        <td class="area-text">{{ row.area }}</td>
+                        <td>{{ row.location }}</td>
+                        <td>{{ row.bhk }}</td>
+                        <td>{{ row.bath }}</td>
+                        <td>{{ row.balcony }}</td>
+                        <td>{{ row.parking }}</td>
+                        <td><span class="badge">{{ row.furnishing }}</span></td>
+                        <td>{{ row.property_type }}</td>
+                        <td>{{ row.age }}</td>
+                        <td class="price-text">₹ {{ "%.2f"|format(row.price) }}</td>
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
