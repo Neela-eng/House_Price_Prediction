@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HOMEPRICE.AI | Expert Valuations</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary-cyan: #00e5ff;
+      --deep-navy: #0f172a;
+      --glass: rgba(255, 255, 255, 0.05);
+      --glass-hover: rgba(255, 255, 255, 0.1);
+      --glass-border: rgba(255, 255, 255, 0.1);
+      --text-gray: #94a3b8;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Outfit', sans-serif;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--deep-navy);
+      color: white;
+      overflow-x: hidden;
+    }
+
+    /* Navbar */
+    .navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 20px 6%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: white;
+    }
+
+    .logo span {
+      color: var(--primary-cyan);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: var(--text-gray);
+      font-size: 14px;
+      font-weight: 500;
+      transition: 0.3s;
+    }
+
+    .nav-link:hover {
+      color: white;
+    }
+
+    /* Buttons */
+    .btn {
+      padding: 10px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      display: inline-block;
+      border: 1px solid transparent;
+    }
+
+    .btn-cyan {
+      background: var(--primary-cyan);
+      color: var(--deep-navy);
+      box-shadow: 0 0 15px rgba(0, 229, 255, 0.2);
+    }
+
+    .btn-cyan:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 25px rgba(0, 229, 255, 0.4);
+    }
+
+    .btn-outline {
+      border: 1px solid var(--glass-border);
+      color: white;
+      background: var(--glass);
+    }
+
+    .btn-outline:hover {
+      background: var(--glass-hover);
+      border-color: var(--primary-cyan);
+    }
+
+    /* Hero Section with Image Background */
+    .hero {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0 20px;
+      position: relative;
+      background: linear-gradient(rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.85)),
+        url("https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80");
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+
+    .content h1 {
+      font-size: 4rem;
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      color: white;
+      /* Restored simple white text */
+    }
+
+    .content h1 span {
+      color: var(--primary-cyan);
+      /* Restored simple cyan span */
+    }
+
+    .content p {
+      font-size: 1.2rem;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 40px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.6;
+    }
+
+    .cta-group {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    /* Features Grid (Website Content Below) */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      max-width: 1100px;
+      margin: 80px auto;
+      padding: 0 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .feature-card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      padding: 30px;
+      border-radius: 16px;
+      text-align: left;
+      transition: 0.3s;
+      backdrop-filter: blur(5px);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(255, 255, 255, 0.2);
+      background: var(--glass-hover);
+    }
+
+    .feature-icon {
+      font-size: 1.8rem;
+      color: var(--primary-cyan);
+      margin-bottom: 15px;
+      display: inline-block;
+    }
+
+    .feature-card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      color: white;
+    }
+
+    .feature-card p {
+      color: var(--text-gray);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    /* About Project Section */
+    .about-section {
+      max-width: 900px;
+      margin: 0 auto 40px;
+      text-align: center;
+      padding: 40px 20px;
+      border-top: 1px solid var(--glass-border);
+    }
+
+    .tech-stack {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .tech-badge {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      color: var(--primary-cyan);
+      border: 1px solid rgba(0, 229, 255, 0.2);
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--glass-border);
+      padding: 40px;
+      text-align: center;
+      color: var(--text-gray);
+      font-size: 0.9rem;
+      background: var(--deep-navy);
+    }
+
+    @media (max-width: 768px) {
+      .content h1 {
+        font-size: 2.5rem;
+      }
+
+      .navbar {
+        padding: 20px;
+      }
+
+      .hero {
+        padding-top: 100px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="navbar">
+    <div class="logo">HOMEPRICE<span>.AI</span></div>
+    <div class="nav-right">
+
+      <a href="{{ url_for('signin') }}" class="nav-link">Sign In</a>
+      <a href="{{ url_for('signup') }}" class="btn btn-cyan">Get Started</a>
+
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="content">
+      <h1>Predict the <span>Future</span> of your Property.</h1>
+      <p>Join the next generation of real estate analysis. Our platform analyzes millions of data points to provide
+        precise valuations and insights for buyers and sellers alike.</p>
+
+      <div class="cta-group">
+        <a href="{{ url_for('signup') }}" class="btn btn-cyan" style="padding: 14px 36px;">Start Free Trial</a>
+        <a href="#about" class="btn btn-outline" style="padding: 14px 36px;">Learn More</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="features">
+    <div class="feature-card">
+      <span class="feature-icon">⚡</span>
+      <h3>Instant Prediction</h3>
+      <p>Get real-time property price estimates based on live market data and historical trends.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">📊</span>
+      <h3>Market Analytics</h3>
+      <p>Deep dive into price trends by area, property type, and furnishing status.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🛡️</span>
+      <h3>Secure & Private</h3>
+      <p>Your data is encrypted and secure. We prioritize user privacy and data integrity.</p>
+    </div>
+  </div>
+
+  <div id="about" class="about-section">
+    <h2 style="margin-bottom: 25px;">Project Technical Overview</h2>
+    <p style="color: var(--text-gray); max-width: 600px; margin: 0 auto;">
+      This application demonstrates a full-stack Machine Learning integration.
+      It uses a <b>Random Forest Regressor</b> model trained on housing data, served via a <b>Flask</b> REST API.
+    </p>
+    <div class="tech-stack">
+      <span class="tech-badge">Python Flask</span>
+      <span class="tech-badge">Scikit-Learn</span>
+      <span class="tech-badge">MySQL Database</span>
+      <span class="tech-badge">Pandas Analysis</span>
+      <span class="tech-badge">Chart.js</span>
+    </div>
+  </div>
+
+  <footer>
+    <p> 2026 HomePrice.AI. Designed for Portfolio.</p>
+  </footer>
+
+</body>
+
+</html>

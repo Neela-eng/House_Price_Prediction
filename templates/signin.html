@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | HomePrice.AI</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary-cyan: #00e5ff;
+      --deep-navy: #0f172a;
+      --glass: rgba(255, 255, 255, 0.05);
+      --glass-hover: rgba(255, 255, 255, 0.1);
+      --glass-border: rgba(255, 255, 255, 0.1);
+      --text-gray: #94a3b8;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Outfit", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background-color: var(--deep-navy);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      padding: 20px;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Background Animation */
+    .bg-glow {
+      position: fixed;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      background: radial-gradient(circle at 50% 50%, #1e293b 0%, #0f172a 100%);
+      top: 0;
+      left: 0;
+    }
+
+    .blob {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(0, 229, 255, 0.08) 0%, rgba(0, 0, 0, 0) 70%);
+      border-radius: 50%;
+      animation: float 10s infinite alternate;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translate(0, 0);
+      }
+
+      100% {
+        transform: translate(30px, 30px);
+      }
+    }
+
+    .layout {
+      width: 100%;
+      max-width: 1000px;
+      display: grid;
+      grid-template-columns: 1fr 0.8fr;
+      gap: 60px;
+      align-items: center;
+      z-index: 10;
+    }
+
+    .left {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: white;
+      text-decoration: none;
+    }
+
+    .logo span {
+      color: var(--primary-cyan);
+    }
+
+    .left h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+      line-height: 1.1;
+      background: linear-gradient(to right, #fff, #94a3b8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .left p {
+      color: var(--text-gray);
+      max-width: 450px;
+      line-height: 1.7;
+      font-size: 1.05rem;
+    }
+
+    .card {
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      color: white;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    }
+
+    .card h2 {
+      margin-bottom: 8px;
+      font-size: 1.8rem;
+    }
+
+    .card small {
+      color: var(--text-gray);
+      display: block;
+      margin-bottom: 25px;
+    }
+
+    label {
+      font-size: 13px;
+      font-weight: 600;
+      margin-top: 18px;
+      display: block;
+      color: #e2e8f0;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 10px;
+      border: 1px solid var(--glass-border);
+      background: rgba(255, 255, 255, 0.03);
+      color: white;
+      margin-top: 8px;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: var(--primary-cyan);
+      background: rgba(255, 255, 255, 0.08);
+      outline: none;
+      box-shadow: 0 0 10px rgba(0, 229, 255, 0.1);
+    }
+
+    select option {
+      background: var(--deep-navy);
+      color: white;
+    }
+
+    .SignIn-btn {
+      width: 100%;
+      padding: 14px 0;
+      border-radius: 10px;
+      border: none;
+      margin-top: 30px;
+      background: var(--primary-cyan);
+      color: var(--deep-navy);
+      font-weight: 600;
+      font-size: 15px;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 0 15px rgba(0, 229, 255, 0.2);
+    }
+
+    .SignIn-btn:hover {
+      box-shadow: 0 0 25px rgba(0, 229, 255, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .msg {
+      margin-top: 10px;
+      font-size: 13px;
+      color: #ef4444;
+      text-align: center;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+      color: var(--text-gray);
+    }
+
+    .footer a {
+      color: var(--primary-cyan);
+      text-decoration: none;
+      font-weight: 600;
+      margin-left: 5px;
+      transition: 0.2s;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 900px) {
+      .layout {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 30px;
+      }
+
+      .left {
+        align-items: center;
+      }
+
+      .left h1 {
+        font-size: 2.2rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="bg-glow">
+    <div class="blob" style="top: -10%; right: -10%;"></div>
+    <div class="blob" style="bottom: -10%; left: -10%; animation-delay: -5s;"></div>
+  </div>
+
+  <div class="layout">
+
+    <div class="left">
+      <a href="{{ url_for('homepage') }}" class="logo">HOMEPRICE<span>.AI</span></a>
+      <h1>Welcome Back</h1>
+      <p>
+        Log in to access your dashboard, view market insights, and manage your property portfolio.
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>Sign In</h2>
+      <small>Enter your credentials</small>
+
+      <form method="POST" action="{{ url_for('signin') }}">
+
+        <label>User Type</label>
+        <select name="usertype" required>
+          <option value="">Select user type</option>
+          <option value="Admin">Admin</option>
+          <option value="Agent">Agent</option>
+          <option value="Customer">Customer</option>
+        </select>
+
+        <label>Username</label>
+        <input name="username" type="text" placeholder="Enter username" required>
+
+        <label>Password</label>
+        <input name="password" type="password" placeholder="Enter password" required>
+
+        <button type="submit" class="SignIn-btn">Sign In</button>
+
+        <div style="text-align: right; margin-top: 10px;">
+          <a href="{{ url_for('forgot_password')}}"
+            style="color: var(--primary-cyan); text-decoration: none; font-size: 13px;">Forgot Password?</a>
+        </div>
+      </form>
+
+      {% if error %}
+      <div class="msg">{{ error }}</div>
+      {% endif %}
+
+      <div class="footer">
+        Don’t have an account? <a href="{{ url_for('signup') }}">Sign Up</a>
+      </div>
+
+    </div>
+
+  </div>
+
+</body>
+
+</html>

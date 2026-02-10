@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Agent Notes | HomePrice.AI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --logo-navy: #1a2b4b;
+            --logo-cyan: #38bdf8;
+            --accent-blue: #3498db;
+            --bg-light: #f4f7f6;
+            --text-muted: #94a3b8;
+            --border: #e2e8f0;
+            --paper-shadow: 0 10px 35px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background-color: var(--bg-light);
+            color: var(--logo-navy);
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        /* ===== TOP NAV BAR ===== */
+        .top-nav {
+            max-width: 1100px;
+            margin: 20px auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-link {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            color: var(--logo-navy);
+            text-decoration: underline;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: var(--logo-navy);
+            text-transform: uppercase;
+        }
+
+        .logo span {
+            color: var(--logo-cyan);
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-add {
+            background: var(--accent-blue);
+            color: #fff;
+        }
+
+        .btn-add:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+
+        .btn-download {
+            background: #fff;
+            color: var(--logo-navy);
+            border: 1px solid var(--border);
+        }
+
+        .btn-download:hover {
+            background: #f1f5f9;
+        }
+
+        /* ===== MAIN CARD ===== */
+        .card {
+            max-width: 900px;
+            margin: 20px auto 100px auto;
+            background: white;
+            padding: 60px 80px;
+            border-radius: 24px;
+            box-shadow: var(--paper-shadow);
+            position: relative;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 32px;
+            font-weight: 800;
+            margin: 0;
+            color: var(--logo-navy);
+            letter-spacing: -0.8px;
+        }
+
+        .doc-header {
+            border-bottom: 2px solid var(--bg-light);
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            text-align: center;
+        }
+
+        .doc-header .meta {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-top: 12px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .editable-text {
+            font-size: 15px;
+            line-height: 1.8;
+            color: #334155;
+            min-height: 300px;
+            outline: none;
+            white-space: pre-line;
+        }
+
+        [contenteditable]:empty:before {
+            content: attr(data-placeholder);
+            color: var(--text-muted);
+        }
+
+        .chart-section {
+            margin-top: 50px;
+            border-top: 2px dashed var(--border);
+            padding-top: 40px;
+        }
+
+        .captured-chart {
+            margin-bottom: 40px;
+            background: var(--bg-light);
+            padding: 24px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            page-break-inside: avoid;
+        }
+
+        .captured-chart h4 {
+            margin: 0 0 15px 0;
+            font-size: 16px;
+            color: var(--logo-navy);
+            font-weight: 700;
+        }
+
+        .captured-chart img {
+            max-width: 100%;
+            border-radius: 8px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .btn-remove {
+            background: #fee2e2;
+            color: #ef4444;
+            padding: 6px 12px;
+            font-size: 12px;
+            margin-top: 15px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-remove:hover {
+            background: #fecaca;
+        }
+
+
+
+
+
+        .action-bar {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 100;
+        }
+
+        .btn-clear {
+            background: #fee2e2;
+            color: #ef4444;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.1);
+        }
+
+        .btn-clear:hover {
+            background: #fecaca;
+        }
+
+
+
+        @media (max-width: 600px) {
+            .card {
+                padding: 40px 20px;
+            }
+
+            .top-nav {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="top-nav">
+        <a href="/agent_dashboard" class="back-link">← Back to Dashboard</a>
+        <div class="logo">HomePrice<span>.AI</span></div>
+        <div class="nav-actions">
+            <button class="btn btn-download" onclick="downloadPDF()">Download PDF</button>
+            <a href="/logout" class="back-link" style="margin-left: 10px;">Logout</a>
+        </div>
+    </div>
+
+    <div class="card" id="reportContent">
+        <div class="doc-header">
+            <h1 contenteditable="true">Property Analysis Report</h1>
+            <div class="meta">
+                <span>Date: <strong id="currentDate"></strong></span>
+                <span>Agent: <strong>{{ username }}</strong></span>
+            </div>
+        </div>
+
+        <div class="editable-text" id="docContent" contenteditable="true"
+            data-placeholder="Start typing your report insights here...">
+            Write your observations and property analysis here. You can include details about the market trends,
+            property condition, and valuation insights.
+        </div>
+
+        <div class="chart-section" id="chartSection">
+            <!-- Captured charts appear here -->
+        </div>
+    </div>
+
+
+
+    <div class="action-bar">
+        <button class="btn btn-clear" onclick="clearNotes()">Clear Report Media</button>
+    </div>
+
+    <script>
+        document.getElementById('currentDate').innerText = new Date().toLocaleDateString();
+
+        function loadCapturedCharts() {
+            const section = document.getElementById('chartSection');
+            const charts = JSON.parse(localStorage.getItem('capturedCharts') || '[]');
+
+            section.innerHTML = '';
+
+            if (charts.length === 0) {
+                section.innerHTML = '<p style="color:var(--text-muted); font-style:italic; text-align:center;">No insights added yet. Visit Analytics to capture charts.</p>';
+                return;
+            }
+
+            charts.forEach((c, index) => {
+                const div = document.createElement('div');
+                div.className = 'captured-chart';
+                div.innerHTML = `
+            <h4>${c.title}</h4>
+            <img src="${c.image}" alt="${c.title}">
+            <button class="btn btn-remove" onclick="removeChart(${index})">Remove Chart</button>
+        `;
+                section.appendChild(div);
+            });
+        }
+
+        function removeChart(index) {
+            let charts = JSON.parse(localStorage.getItem('capturedCharts') || '[]');
+            charts.splice(index, 1);
+            localStorage.setItem('capturedCharts', JSON.stringify(charts));
+            loadCapturedCharts();
+        }
+
+        function clearNotes() {
+            if (confirm('Are you sure you want to clear all attached charts from this report?')) {
+                localStorage.removeItem('capturedCharts');
+                loadCapturedCharts();
+            }
+        }
+
+
+
+        function downloadPDF() {
+            const element = document.getElementById('reportContent');
+
+            // Temporary styles for PDF
+            const removeBtns = document.querySelectorAll('.btn-remove');
+            removeBtns.forEach(b => b.style.display = 'none');
+
+            const opt = {
+                margin: [15, 15],
+                filename: `Property_Report_${new Date().getTime()}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                removeBtns.forEach(b => b.style.display = 'inline-block');
+            });
+        }
+
+        window.onload = loadCapturedCharts;
+    </script>
+
+</body>
+
+</html>

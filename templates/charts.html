@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Data Insights | HomePrice.AI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --logo-navy: #1a2b4b;
+            --logo-cyan: #38bdf8;
+            --bg-light: #f4f7f6;
+            --btn-dark: #0f172a;
+            --text-muted: #94a3b8;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg-light);
+            margin: 0;
+            padding: 30px 20px;
+            overflow-x: hidden;
+        }
+
+        .top-nav {
+            max-width: 900px;
+            margin: 0 auto 20px auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        a {
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--logo-navy);
+            letter-spacing: -0.5px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .logo span {
+            color: var(--logo-cyan);
+        }
+
+        /* SLIDER STYLES */
+        .slider-container {
+            position: relative;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 50px;
+            /* Space for buttons */
+        }
+
+        .slider-viewport {
+            overflow: hidden;
+            border-radius: 18px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .slider-wrapper {
+            display: flex;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .chart-card {
+            min-width: 100%;
+            background: #fff;
+            padding: 30px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .chart-card h3 {
+            margin-bottom: 20px;
+            color: var(--logo-navy);
+        }
+
+        canvas {
+            max-height: 400px;
+        }
+
+        /* NAVIGATION BUTTONS */
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--btn-dark);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: 0.3s;
+            z-index: 10;
+        }
+
+        .nav-btn:hover {
+            background: var(--logo-cyan);
+            color: #000;
+        }
+
+        .prev-btn {
+            left: 0;
+        }
+
+        .next-btn {
+            right: 0;
+        }
+
+        .note-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 25px;
+            background: var(--btn-dark);
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .pagination {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .dot {
+            height: 10px;
+            width: 10px;
+            margin: 0 5px;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+
+        .dot.active {
+            background-color: var(--logo-cyan);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="top-nav">
+        <a href="{{ url_for('dashboard') }}" style="color: var(--text-muted);">← Back to Dashboard</a>
+        <a href="{{ url_for('logout') }}" style="color:#ef4444; font-weight: 600;">Logout</a>
+    </div>
+
+    <div class="logo">HOMEPRICE<span>.AI</span></div>
+
+    <div class="slider-container">
+        <button class="nav-btn prev-btn" onclick="moveSlide(-1)">&#10094;</button>
+        <button class="nav-btn next-btn" onclick="moveSlide(1)">&#10095;</button>
+
+        <div class="slider-viewport">
+            <div class="slider-wrapper" id="sliderWrapper">
+                <!-- Slides will be grouped here -->
+                <div class="chart-card">
+                    <h3>Price vs Area</h3>
+                    <canvas id="areaChart"></canvas>
+                    <button class="note-btn" onclick="addToNotes('areaChart', 'Price vs Area')">Add to Notes</button>
+                </div>
+                <div class="chart-card">
+                    <h3>Price vs Age</h3>
+                    <canvas id="ageChart"></canvas>
+                    <button class="note-btn" onclick="addToNotes('ageChart', 'Price vs Age')">Add to Notes</button>
+                </div>
+                <div class="chart-card">
+                    <h3>Average Price by BHK</h3>
+                    <canvas id="bhkChart"></canvas>
+                    <button class="note-btn" onclick="addToNotes('bhkChart', 'Avg Price by BHK')">Add to Notes</button>
+                </div>
+                <div class="chart-card">
+                    <h3>Average Price by Bathrooms</h3>
+                    <canvas id="bathChart"></canvas>
+                    <button class="note-btn" onclick="addToNotes('bathChart', 'Avg Price by Bathrooms')">Add to
+                        Notes</button>
+                </div>
+                <div class="chart-card">
+                    <h3>Average Price by Balcony</h3>
+                    <canvas id="balconyChart"></canvas>
+                    <button class="note-btn" onclick="addToNotes('balconyChart', 'Avg Price by Balcony')">Add to
+                        Notes</button>
+                </div>
+                <div class="chart-card">
+                    <h3>Average Price by Parking</h3>
+                    <canvas id="parkingChart"></canvas>
+                    <button class="note-btn" onclick="addToNotes('parkingChart', 'Avg Price by Parking')">Add to
+                        Notes</button>
+                </div>
+                <div class="chart-card">
+                    <h3>Average Price by Furnishing</h3>
+                    <canvas id="furnishingChart"></canvas>
+                    <button class="note-btn" onclick="addToNotes('furnishingChart', 'Avg Price by Furnishing')">Add to
+                        Notes</button>
+                </div>
+                <div class="chart-card">
+                    <h3>Average Price by Property Type</h3>
+                    <canvas id="typeChart"></canvas>
+                    <button class="note-btn" onclick="addToNotes('typeChart', 'Avg Price by Type')">Add to
+                        Notes</button>
+                </div>
+                <div class="chart-card">
+                    <h3>Average Price by Location</h3>
+                    <canvas id="locationChart"></canvas>
+                    <button class="note-btn" onclick="addToNotes('locationChart', 'Avg Price by Location')">Add to
+                        Notes</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="pagination" id="pagination">
+            <!-- Dots will be generated here -->
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.chart-card');
+        const wrapper = document.getElementById('sliderWrapper');
+        const pagination = document.getElementById('pagination');
+
+        // Create dots
+        slides.forEach((_, i) => {
+            const dot = document.createElement('span');
+            dot.classList.add('dot');
+            if (i === 0) dot.classList.add('active');
+            dot.onclick = () => goToSlide(i);
+            pagination.appendChild(dot);
+        });
+
+        function updatePagination() {
+            document.querySelectorAll('.dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentSlide);
+            });
+        }
+
+        function moveSlide(n) {
+            currentSlide = (currentSlide + n + slides.length) % slides.length;
+            updateSlider();
+        }
+
+        function goToSlide(n) {
+            currentSlide = n;
+            updateSlider();
+        }
+
+        function updateSlider() {
+            wrapper.style.transform = `translateX(-${currentSlide * 100}%)`;
+            updatePagination();
+        }
+
+        fetch("/chart-data").then(res => res.json()).then(d => {
+            if (d.error) {
+                alert("Session expired. Please login again.");
+                window.location.href = "/signin";
+                return;
+            }
+
+            // AREA - scatter
+            new Chart(document.getElementById('areaChart'), {
+                type: 'scatter',
+                data: { datasets: [{ label: 'Price vs Area', data: d.area_price.map(x => ({ x: x.area, y: x.price })), backgroundColor: '#38bdf8' }] },
+                options: { responsive: true, scales: { x: { title: { display: true, text: 'Area (sq.ft)' } }, y: { title: { display: true, text: 'Price' } } } }
+            });
+
+            // AGE - scatter
+            new Chart(document.getElementById('ageChart'), {
+                type: 'scatter',
+                data: { datasets: [{ label: 'Price vs Age', data: d.age_price.map(x => ({ x: x.age, y: x.price })), backgroundColor: '#38bdf8' }] },
+                options: { responsive: true, scales: { x: { title: { display: true, text: 'Age (years)' } }, y: { title: { display: true, text: 'Price' } } } }
+            });
+
+            // Bar chart helper
+            function barChart(id, data, label) {
+                new Chart(document.getElementById(id), {
+                    type: 'bar',
+                    data: { labels: data.map(x => x.label), datasets: [{ label: 'Avg Price', data: data.map(x => x.avg_price), backgroundColor: '#38bdf8' }] },
+                    options: { responsive: true, scales: { x: { title: { display: true, text: label } }, y: { title: { display: true, text: 'Average Price' } } } }
+                });
+            }
+
+            // Bar charts for categorical features
+            barChart('bhkChart', d.bhk, 'BHK');
+            barChart('bathChart', d.bath, 'Bathrooms');
+            barChart('balconyChart', d.balcony, 'Balcony');
+            barChart('parkingChart', d.parking, 'Parking');
+            barChart('furnishingChart', d.furnishing, 'Furnishing');
+            barChart('typeChart', d.property_type, 'Property Type');
+            barChart('locationChart', d.location, 'Location');
+        });
+
+        function addToNotes(chartId, title) {
+            const canvas = document.getElementById(chartId);
+            if (!canvas) return;
+
+            const dataUrl = canvas.toDataURL("image/png");
+            let savedCharts = JSON.parse(localStorage.getItem("capturedCharts") || "[]");
+
+            // Avoid duplicates
+            if (!savedCharts.some(c => c.title === title)) {
+                savedCharts.push({ id: chartId, title: title, image: dataUrl });
+                localStorage.setItem("capturedCharts", JSON.stringify(savedCharts));
+                alert(title + " added to your notes!");
+            } else {
+                alert(title + " is already in your notes.");
+            }
+        }
+    </script>
+</body>
+
+</html>

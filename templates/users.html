@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User List | HomePrice.AI</title>
+
+    <style>
+        :root {
+            --nav-bg: #1e293b;
+            --primary-blue: #3b82f6;
+            --text-main: #334155;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            background-color: #f8fafc;
+            color: var(--text-main);
+        }
+
+        header {
+            background-color: var(--nav-bg);
+            padding: 0.75rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+
+        .logo-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+        }
+
+        .logo-group span {
+            color: #38bdf8;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary {
+            background: #334155;
+            color: white;
+            border: 1px solid #475569;
+        }
+
+        .btn-secondary:hover {
+            background: #475569;
+        }
+
+        .btn-outline {
+            border: 1px solid #ef4444;
+            color: #ef4444;
+        }
+
+        .btn-outline:hover {
+            background: #ef4444;
+            color: white;
+        }
+
+        .main-container {
+            padding: 30px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .table-card {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+        }
+
+        th {
+            background: #f1f5f9;
+            padding: 16px;
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #64748b;
+            border-bottom: 1px solid var(--border);
+            text-align: left;
+        }
+
+        td {
+            padding: 16px;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 14px;
+        }
+
+        tr:hover {
+            background-color: #f8fafc;
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+
+        .user-id {
+            font-weight: 600;
+        }
+
+        .email-text {
+            color: var(--primary-blue);
+            font-weight: 500;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo-group">
+            HOMEPRICE<span>.AI</span>
+        </div>
+
+        <div class="btn-group">
+            <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">← Back to Dashboard</a>
+            <a href="{{ url_for('logout') }}" class="btn btn-outline">Logout</a>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <h1>Registered Users</h1>
+        <p>All registered users</p>
+
+        <div class="table-card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>User Type</th>
+                        <th>Username</th>
+                        <th>Email ID</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td class="user-id">{{ user.user_id }}</td>
+                        <td><span class="badge">{{ user.Usertype }}</span></td>
+                        <td>{{ user.Username }}</td>
+                        <td class="email-text">{{ user.Email }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+
+</html>

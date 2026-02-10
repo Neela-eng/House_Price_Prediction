@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help & Support | HomePrice.AI</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Montserrat:wght@600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --logo-navy: #1a2b4b;
+            --logo-cyan: #38bdf8;
+            --accent-blue: #3498db;
+            --bg-light: #f4f7f6;
+            --text-muted: #94a3b8;
+            --btn-dark: #0f172a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--logo-navy);
+            min-height: 100vh;
+        }
+
+        /* ===== TOP NAV ===== */
+        .top-nav {
+            max-width: 800px;
+            margin: 0 auto 20px auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-link {
+            text-decoration: none;
+            color: #64748b;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            color: var(--btn-dark);
+        }
+
+        .logout-link {
+            text-decoration: none;
+            color: #ef4444;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .logout-link:hover {
+            text-decoration: underline;
+        }
+
+        /* ===== LOGO ===== */
+        .logo {
+            text-align: center;
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--logo-navy);
+            letter-spacing: -0.5px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .logo span {
+            color: var(--logo-cyan);
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 35px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            font-family: 'Montserrat', sans-serif;
+            margin-bottom: 10px;
+            text-align: center;
+            font-weight: 800;
+            color: var(--logo-navy);
+        }
+
+        p.subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+        }
+
+        .faq-item {
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border-left: 5px solid var(--accent-blue);
+        }
+
+        .faq-item h3 {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--logo-navy);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .contact-section {
+            text-align: center;
+            margin-top: 60px;
+            padding: 40px;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .contact-section h2 {
+            font-family: 'Montserrat', sans-serif;
+            margin-bottom: 15px;
+            color: var(--logo-navy);
+            font-weight: 700;
+        }
+
+        .btn-contact {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 30px;
+            background: var(--logo-cyan);
+            color: var(--logo-navy);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 700;
+            transition: 0.3s;
+            border: none;
+        }
+
+        .btn-contact:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- ===== TOP NAV ===== -->
+    <div class="top-nav">
+        {% if session.get('usertype') == 'agent' %}
+        <a href="{{ url_for('agent_dashboard') }}" class="back-link">← Back to Dashboard</a>
+        {% elif session.get('usertype') == 'customer' %}
+        <a href="{{ url_for('customer_dashboard') }}" class="back-link">← Back to Dashboard</a>
+        {% elif session.get('usertype') == 'admin' %}
+        <a href="{{ url_for('admin_dashboard') }}" class="back-link">← Back to Dashboard</a>
+        {% else %}
+        <a href="{{ url_for('homepage') }}" class="back-link">← Home</a>
+        {% endif %}
+        <a href="{{ url_for('logout') }}" class="logout-link">Logout</a>
+    </div>
+
+    <!-- ===== LOGO ===== -->
+    <div class="logo">HOMEPRICE<span>.AI</span></div>
+    <div class="subtitle">Get an instant home price estimate</div>
+
+    <div class="container">
+        <h1>Help Center</h1>
+        <p class="subtitle">Frequently asked questions and support</p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div style="padding: 15px; margin-bottom: 25px; border-radius: 12px; 
+                  background: rgba(56, 189, 248, 0.1); border: 1px solid var(--logo-cyan); 
+                  color: var(--logo-navy); text-align: center; font-size: 14px; font-weight: 600;">
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <div class="faq-item">
+            <h3>How accurate are the price predictions?</h3>
+            <p>Our model uses advanced machine learning trained on millions of data points. While highly accurate, we
+                recommend using the valuation as a guideline rather than an absolute appraisal.</p>
+        </div>
+
+        <div class="faq-item">
+            <h3>Can I change my prediction inputs?</h3>
+            <p>Yes, simply navigate back to the prediction form and submit new details. All your predictions are saved
+                in your history.</p>
+        </div>
+
+        <div class="faq-item">
+            <h3>How do I reset my password?</h3>
+            <p>If you are logged out, use the "Forgot Password" link on the sign-in page. If logged in, go to your
+                Profile settings to update it.</p>
+        </div>
+
+        <div class="contact-section">
+            <h2>Submit a Support Request</h2>
+            <p style="margin-bottom: 25px;">Fill out the form below and our team will get back to you.</p>
+
+            <form action="{{ url_for('submit_help') }}" method="POST"
+                style="text-align: left; max-width: 500px; margin: 0 auto;">
+                <div style="margin-bottom: 20px;">
+                    <label
+                        style="display: block; margin-bottom: 8px; font-size: 14px; color: var(--text-muted); font-weight: 600;">Subject</label>
+                    <input type="text" name="subject" required placeholder="What do you need help with?"
+                        style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: #f8fafc; color: var(--logo-navy); outline: none;">
+                </div>
+                <div style="margin-bottom: 25px;">
+                    <label
+                        style="display: block; margin-bottom: 8px; font-size: 14px; color: var(--text-muted); font-weight: 600;">Message</label>
+                    <textarea name="message" required placeholder="Describe your issue in detail..." rows="5"
+                        style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: #f8fafc; color: var(--logo-navy); outline: none; resize: vertical;"></textarea>
+                </div>
+                <button type="submit" class="btn-contact" style="width: 100%; cursor: pointer;">Send Request</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Help Requests | Admin</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --logo-navy: #1a2b4b;
+            --logo-cyan: #38bdf8;
+            --main-blue: #2c3e50;
+            --accent-blue: #3498db;
+            --bg-light: #f4f7f6;
+            --text-muted: #94a3b8;
+            --btn-dark: #0f172a;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --pending: #f59e0b;
+        }
+
+        body {
+            font-family: Inter, system-ui, sans-serif;
+            background-color: var(--bg-light);
+            margin: 0;
+            padding: 30px 20px;
+            color: var(--logo-navy);
+            min-height: 100vh;
+        }
+
+        /* ===== TOP NAV ===== */
+        .top-nav {
+            max-width: 1100px;
+            margin: 0 auto 20px auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-link {
+            text-decoration: none;
+            color: #64748b;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            color: var(--btn-dark);
+        }
+
+        .logout-link {
+            text-decoration: none;
+            color: #ef4444;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .logout-link:hover {
+            text-decoration: underline;
+        }
+
+        /* ===== LOGO ===== */
+        .logo {
+            text-align: center;
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--logo-navy);
+            letter-spacing: -0.5px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .logo span {
+            color: var(--logo-cyan);
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 35px;
+        }
+
+        .card {
+            max-width: 1100px;
+            margin: 0 auto 50px auto;
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-header h2 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--logo-navy);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th {
+            text-align: left;
+            padding: 15px;
+            color: var(--text-muted);
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 20px 15px;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 14px;
+            color: var(--logo-navy);
+        }
+
+        .user-tag {
+            font-size: 12px;
+            background: #f1f5f9;
+            padding: 2px 8px;
+            border-radius: 4px;
+            color: var(--text-muted);
+            margin-left: 5px;
+            text-transform: capitalize;
+            font-weight: 600;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: rgba(245, 158, 11, 0.2);
+            color: #fbbf24;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .status-resolved {
+            background: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-resolve {
+            background: var(--logo-cyan);
+            color: #0f172a;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+
+        .btn-resolve:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.1);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ===== TOP NAV ===== -->
+    <div class="top-nav">
+        <a href="{{ url_for('admin_dashboard') }}" class="back-link">← Admin Dashboard</a>
+        <a href="{{ url_for('logout') }}" class="logout-link">Logout</a>
+    </div>
+
+    <!-- ===== LOGO ===== -->
+    <div class="logo">HOMEPRICE<span>.AI</span></div>
+    <div class="subtitle">Get an instant home price estimate</div>
+
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-headset" style="color: var(--logo-cyan);"></i>
+            <h2>Support & Help Requests</h2>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div
+            style="padding: 12px; margin-bottom: 20px; border-radius: 8px; background: rgba(56, 189, 248, 0.1); border: 1px solid var(--logo-cyan); color: var(--logo-navy); font-size: 14px; font-weight: 600;">
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        {% if help_requests %}
+        <table>
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Subject</th>
+                    <th>Message</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for req in help_requests %}
+                <tr>
+                    <td>
+                        <strong>{{ req.username }}</strong>
+                        <span class="user-tag">{{ req.usertype }}</span>
+                    </td>
+                    <td style="color: var(--logo-navy); font-weight: 600;">{{ req.subject }}</td>
+                    <td style="max-width: 300px; color: #555;">{{ req.message }}</td>
+                    <td>
+                        <span class="status-badge status-{{ req.status.lower() }}">
+                            {{ req.status }}
+                        </span>
+                    </td>
+                    <td style="white-space: nowrap; color: var(--text-muted); font-size: 12px;">{{ req.created_at }}
+                    </td>
+                    <td>
+                        {% if req.status == 'Pending' %}
+                        <a href="{{ url_for('resolve_help', request_id=req.id) }}" class="btn-resolve">Resolve</a>
+                        {% else %}
+                        <i class="fas fa-check-circle" style="color: var(--success);"></i>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-inbox" style="font-size: 3rem; margin-bottom: 15px;"></i>
+            <p>No support requests found.</p>
+        </div>
+        {% endif %}
+    </div>
+
+</body>
+
+</html>
